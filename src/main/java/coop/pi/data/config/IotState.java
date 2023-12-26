@@ -1,4 +1,4 @@
-package coop.pi.config;
+package coop.pi.data.config;
 
 import lombok.Data;
 

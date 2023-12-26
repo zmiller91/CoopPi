@@ -1,4 +1,4 @@
-package coop.pi.config;
+package coop.pi.data.config;
 
 import com.google.gson.JsonObject;
 import lombok.Data;

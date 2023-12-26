@@ -1,6 +1,5 @@
 package coop.pi.service;
 
-import com.amazonaws.services.iot.client.AWSIotException;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil;
 import coop.pi.Context;
@@ -27,13 +26,17 @@ public abstract class PiRunner {
         this.isRunning = true;
 
         init();
+
         connect();
+        connected();
+
         subscribe();
+        subscribed();
 
         while(this.shouldRun) {
             try {
-                invoke();
                 Thread.sleep(1000);
+                invoke();
             } catch (Throwable t) {
                 log.warn(t);
                 handleError(t);
@@ -53,7 +56,6 @@ public abstract class PiRunner {
             SampleUtil.KeyStorePasswordPair pair = SampleUtil.getKeyStorePasswordPair(certificateFile, privateKeyFile);
             this.client = new AWSIotMqttClient(clientEndpoint, clientId, pair.keyStore, pair.keyPassword);
             this.client.connect();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +66,10 @@ public abstract class PiRunner {
             for(ShadowSubscription subscription : subscriptions()) {
                 client().subscribe(subscription);
             }
-        } catch (AWSIotException e) {
+
+            // TODO: Apparently I need to wait a second before the subscription to take effect...
+            Thread.sleep(2000);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -76,6 +81,9 @@ public abstract class PiRunner {
 
         return this.client;
     }
+
+    protected void connected(){};
+    protected void subscribed(){};
 
     protected abstract void init();
     protected abstract void invoke();

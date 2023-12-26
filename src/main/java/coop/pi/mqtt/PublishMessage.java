@@ -10,8 +10,7 @@ public class PublishMessage extends AWSIotMessage {
 
     @Override
     public void onSuccess() {
-        System.out.println("Successfully sent message");
-        System.out.println(new String(getPayload()));
+        System.out.println(String.format("Successfully sent message to %s: %s", getTopic(), new String(getPayload())));
     }
 
     @Override

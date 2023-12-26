@@ -14,7 +14,8 @@ public enum ShadowTopic {
 
     GET("$aws/things/%s/shadow/get"),
     UPDATE("$aws/things/%s/shadow/update"),
-    DELETE("$aws/things/%s/shadow/delete");
+    DELETE("$aws/things/%s/shadow/delete"),
+    METRIC("datatopic");
 
     private final String shadowName = Context.getInstance().shadowName();
     private final String topic;
